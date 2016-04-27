@@ -1,7 +1,8 @@
 class FeaturesController < ApplicationController
   def index
-  	listingId = params[:listing_id]
-  	@listing = Listing.find(listingId)
+  	@user = User.find(params[:user_id])
+    listingId = params[:listing_id]
+  	@listing = @user.listings.find(listingId)
   	@features = @listing.features
   end
 
@@ -27,7 +28,7 @@ class FeaturesController < ApplicationController
 
   private
   def features_params
-    params.require(:feature).permit(:listing_id, :description)  	 	
+    params.require(:feature).permit(:user_id, :listing_id, :description)  	 	
   end  	 
 
 end

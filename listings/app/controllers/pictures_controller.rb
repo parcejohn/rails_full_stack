@@ -3,18 +3,21 @@ class PicturesController < ApplicationController
   	# The following two lines use the pictures_params
   	# listingId = picture_params[:listing_id]
   	# @listing = Listing.find(listingId)
-  	@listing = Listing.find(params[:listing_id])
+    @user = User.find(params[:user_id])
+  	@listing = @user.listings.find(params[:listing_id])
   	@pictures = @listing.pictures
   end
 
   def new
-  	@listing = Listing.find(params[:listing_id])
-  	@picture = Picture.new
+  	@user = User.find(params[:user_id])
+    @listing = @user.listings.find(params[:listing_id])
+  	@picture = Picture.new(:listing => @listing)
   end
 
   def create
+    @user = User.find(params[:user_id])
   	listingId = params[:listing_id]
-  	@listing = Listing.find(listingId)
+  	@listing = @user.listings.find(listingId)
 
   	@picture = Picture.new(picture_params)
 
@@ -46,13 +49,15 @@ class PicturesController < ApplicationController
   end
 
   def edit
-  	@listing = Listing.find(params[:listing_id])
+    @user = User.find(params[:user_id])
+  	@listing = @user.listings.find(params[:listing_id])
   	@picture = @listing.pictures.find(params[:id])
   end
 
   def update
+    @user = User.find(params[:user_id])
     listingId = params[:listing_id]
-    @listing = Listing.find(listingId)
+    @listing = @user.listings.find(listingId)
 
     @picture = @listing.pictures.find(params[:id])
     uploadIO = params[:picture][:image]
@@ -84,8 +89,9 @@ class PicturesController < ApplicationController
   end
 
   def destroy
+    @user = User.find(params[:user_id])
   	listingId = params[:listing_id]
-    listing = Listing.find(listingId)
+    listing = @user.listings.find(listingId)
 
     picture = listing.pictures.find(params[:id])
 
@@ -95,12 +101,13 @@ class PicturesController < ApplicationController
     end
     
     listing.pictures.destroy(picture)
-    redirect_to listing_pictures_path(listing)
+    redirect_to user_listing_pictures_path(@user,listing)
   end
 
   def show
+    @user = User.find(params[:user_id])
     listingId = params[:listing_id]
-    @listing = Listing.find(listingId)
+    @listing = @user.listings.find(listingId)
 
     @picture = @listing.pictures.find(params[:id])
   end
@@ -108,6 +115,6 @@ class PicturesController < ApplicationController
 # parameters whitelist 
   private
   def picture_params
-    params.require(:picture).permit(:listing_id, :title)  	 	
+    params.require(:picture).permit(:user_id, :listing_id, :title)  	 	
   end  
 end
