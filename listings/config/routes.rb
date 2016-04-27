@@ -1,31 +1,38 @@
 Rails.application.routes.draw do
   # get 'public/index'
 
-  get 'accounts/login'
+  # get 'accounts/login'
 
-  get 'accounts/logout'
+  # get 'accounts/logout'
 
-  get 'users/index'
+  # get 'users/index'
 
-  get 'users/new'
+  # get 'users/new'
 
-  get 'users/create'
+  # get 'users/create'
 
-  get 'users/edit'
+  # get 'users/edit'
 
-  get 'users/update'
+  # get 'users/update'
 
-  get 'users/destroy'
+  # get 'users/destroy'
 
   # get 'pictures/index'
 
   # get 'features/index'
 
   root 'public#index'
+  get 'login' => 'accounts#login', as: :login
+  get 'logout' => 'accounts#logout', as: :logout
+  post 'authenticate' => 'accounts#authenticate', as: :authenticate
+
   get 'public/:listing_id/details' => 'public#details', as: :details
-  resources :listings do
-    resources :features
-    resources :pictures
+
+  resources :users do
+    resources :listings do
+      resources :features
+      resources :pictures
+    end
   end
 
 
