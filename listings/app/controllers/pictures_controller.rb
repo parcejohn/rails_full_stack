@@ -11,7 +11,7 @@ class PicturesController < ApplicationController
   def new
   	@user = User.find(params[:user_id])
     @listing = @user.listings.find(params[:listing_id])
-  	@picture = Picture.new(:listing => @listing)
+  	@picture = Picture.new(:listing=>@listing)
   end
 
   def create
@@ -40,7 +40,7 @@ class PicturesController < ApplicationController
   		end
 
   		if @picture.save
-  			redirect_to listing_pictures_path
+  			redirect_to user_listing_pictures_path
   		else
   			render 'new'
   		end
@@ -82,7 +82,7 @@ class PicturesController < ApplicationController
     end
 
     if @picture.update(picture_params)
-      redirect_to listing_pictures_path(@listing)
+      redirect_to user_listing_pictures_path
     else
       render 'edit'
     end
